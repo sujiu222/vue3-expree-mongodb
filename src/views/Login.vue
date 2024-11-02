@@ -23,9 +23,9 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
 import { reactive, ref } from 'vue'
-const router = new useRoute();
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const loginForm = reactive({
     username: '',
     password: ''
