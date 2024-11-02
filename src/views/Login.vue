@@ -3,6 +3,7 @@
         <vue-particles id="tsparticles" @particles-loaded="particlesLoaded" :options="option" />
     </div>
     <div class="formContainer">
+        <h3>企业门户网站管理系统</h3>
         <el-form ref="loginFormRef" style="max-width: 600px" :model="loginForm" status-icon :rules="loginrules"
             label-width="auto" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
@@ -13,16 +14,18 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm()">
-                    Submit
+                    登陆
                 </el-button>
-                <el-button @click="resetForm(loginFormRef)">Reset</el-button>
+
             </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 import { reactive, ref } from 'vue'
+const router = new useRoute();
 const loginForm = reactive({
     username: '',
     password: ''
@@ -43,6 +46,15 @@ const particlesLoaded = async container => {
     console.log("Particles container loaded", container);
 };
 const submitForm = () => {
+    loginFormRef.value.validate((valid) => {
+        console.log(valid);
+        if (valid) {
+            console.log(loginForm);
+            localStorage.setItem("token", "kerwin");
+            router.push('/index');
+
+        }
+    })
 
 }
 const resetForm = (formEl) => {
@@ -127,4 +139,26 @@ const option = {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.formContainer {
+    width: 500px;
+    height: 300px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba($color: #000000, $alpha: 0.5);
+    color: white;
+    text-align: center;
+    padding: 20px;
+
+    h3 {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+}
+
+::v-deep .el-form-item__label {
+    color: white;
+}
+</style>
