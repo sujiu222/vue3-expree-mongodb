@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
 const router = useRouter();
@@ -51,6 +52,12 @@ const submitForm = () => {
         if (valid) {
             console.log(loginForm);
             localStorage.setItem("token", "kerwin");
+            axios.get("/users").then(
+                res => {
+                    console.log(res.data);
+
+                }
+            )
             router.push('/index');
 
         }
