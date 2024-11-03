@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@tsparticles/slim": "^3.5.0",
     "@tsparticles/vue3": "^3.0.1",
     "core-js": "^3.8.3",
@@ -15,6 +16,7 @@
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0",
+    "vuex-persistedstate": "^4.1.0",
     "webpack": "^5.96.1"
   },
   "devDependencies": {

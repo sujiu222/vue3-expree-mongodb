@@ -159,6 +159,7 @@ const option = {
 }
 
 ::v-deep .el-form-item__label {
+    //v-deep就是一个印记 ，当使用这个后就会从.el-form-item__label[data-v-26084dc2] 变成[data-v-26084dc2] .el-form-item__label
     color: white;
 }
 </style>
