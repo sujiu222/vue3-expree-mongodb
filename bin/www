@@ -8,7 +8,8 @@ var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 
-require('../config/db.config')
+const mongoose = require('../config/db.config')
+
 /**
  * Get port from environment and store in Express.
  */
@@ -50,7 +51,7 @@ function normalizePort(val) {
   return false;
 }
 
-/**
+/**cd
  * Event listener for HTTP server "error" event.
  */
 
