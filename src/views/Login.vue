@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
@@ -48,18 +49,29 @@ const particlesLoaded = async container => {
 };
 const submitForm = () => {
     loginFormRef.value.validate((valid) => {
-        console.log(valid);
+        //console.log(valid);
         if (valid) {
-            console.log(loginForm);
-            localStorage.setItem("token", "kerwin");
-            axios.get("/users").then(
+            // console.log(loginForm);
+            // localStorage.setItem("token", "kerwin");
+            axios.post("/adminapi/user/login", loginForm).then(
                 res => {
                     console.log(res.data);
+                    if (res.data.ActionType === "OK") {
+                        localStorage.setItem("token", res.data.token);
+                        router.push('/index');
+                    }
+                    else {
+                        ElMessage.error({
+                            message: '用户名和密码不匹配',
+
+                        });
+                    }
 
                 }
             )
-            router.push('/index');
-
+            //     .catch(err => {
+            //         console.log(err);
+            //     })
         }
     })
 
@@ -149,7 +161,7 @@ const option = {
 <style lang="scss" scoped>
 .formContainer {
     width: 500px;
-    height: 300px;
+    height: 200px;
     position: fixed;
     left: 50%;
     top: 50%;
@@ -158,6 +170,7 @@ const option = {
     color: white;
     text-align: center;
     padding: 20px;
+
 
     h3 {
         font-size: 30px;
