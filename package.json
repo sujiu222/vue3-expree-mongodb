@@ -11,6 +11,8 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^8.8.0",
     "morgan": "~1.9.1",
     "node-dev": "^8.0.0"
   }
