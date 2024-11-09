@@ -8,7 +8,7 @@
         </div>
         <div class="right">
             <span>欢迎 admin 回来</span>
-            <el-dropdown>
+            <el-dropdown style="margin-left: 5px;">
                 <span class="el-dropdown-link">
 
                     <el-icon :size="30" color="white">
