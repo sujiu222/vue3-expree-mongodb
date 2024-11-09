@@ -42,6 +42,7 @@ const handleCenter = () => {
 }
 const handleLogin = () => {
     localStorage.removeItem('token');
+    store.commit('clearUserInfo');
     router.push('/login');
 }
 </script>

@@ -23,10 +23,13 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex'  // Import useStore from vuex
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
+
+const store = useStore()
 const router = useRouter();
 const loginForm = reactive({
     username: '',
@@ -57,7 +60,10 @@ const submitForm = () => {
                 res => {
                     console.log(res.data);
                     if (res.data.ActionType === "OK") {
-                        localStorage.setItem("token", res.data.token);
+                        store.commit('changeUserInfo', res.data.data);
+                        console.log(JSON.stringify(store.state.userInfo, null, 2));
+
+                        // localStorage.setItem("token", res.data.token);
                         router.push('/index');
                     }
                     else {
