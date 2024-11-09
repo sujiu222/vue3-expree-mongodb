@@ -14,11 +14,18 @@ const UserController = {
             const token = JWT.generate({
                 _id: result[0]._id,
                 username: result[0].username,
-            }, '10s');
+            }, '1d');
             res.header("Authorization", token);
             res.send({
                 ActionType: 'OK',
-                token: 'kerwin',
+                data:
+                {
+                    username: result[0].username,
+                    gender: result[0].gender ? result[0].gender : 0,
+                    introduction: result[0].introduction,
+                    avatar: result[0].avatar,
+                    role: result[0].role,
+                }
             })
         }
     }

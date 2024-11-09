@@ -8,7 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-const UserRouter = require('./routes/admin/UserRouter')
+const UserRouter = require('./routes/admin/UserRouter');
+const JWT = require('./util/JWT');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,11 +23,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use((req, res, next) => {
+  //如果token有效，next
+  //如果过期了，返回401错误
+  if (req.url === '/adminapi/user/login') {
+    next();
+    return;
+  }
+  const token = req.headers['authorization'].split(' ')[1];
+  if (token) {
+    var payload = JWT.verify(token);
+    console.log(payload);
+    if (payload) {
+      const newtoken = JWT.generate({
+        _id: payload._id,
+        username: payload.username,
+      }, '1d');
+      res.header('authorization', newtoken);
+      next();
+    }
+    else {
+      res.send(401).send({ error: '-1', errorInfo: 'token过期' });
+    }
+  }
+  else {
+    res.send(401).send({ error: '-1', errorInfo: 'token不存在' });
+  }
+})
 app.use(UserRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+
+
 });
 
 // error handler
