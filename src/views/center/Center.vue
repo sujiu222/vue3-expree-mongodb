@@ -49,22 +49,7 @@
               <el-input v-model="userForm.introduction" type="textarea" />
             </el-form-item>
             <el-form-item label="头像" prop="avatar">
-              <el-upload
-                class="avatar-uploader"
-                :on-change="handleChange"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                :show-file-list="false"
-                :auto-upload="false"
-              >
-                <img
-                  v-if="userForm.avatar"
-                  :src="init + userForm.avatar"
-                  class="avatar"
-                />
-                <el-icon v-else class="avatar-uploader-icon">
-                  <Plus />
-                </el-icon>
-              </el-upload>
+              <Upload :avatar="userForm.avatar" @kerwinchange="handleChange" />
             </el-form-item>
             <el-button type="primary" @click="submitForm()"> 登陆 </el-button>
             <el-form-item> </el-form-item>
@@ -78,15 +63,12 @@
 <script setup>
 import { computed, ref, reactive } from "vue";
 import { useStore } from "vuex";
-import { Plus } from "@element-plus/icons-vue";
-import axios from "axios";
 import upload from "@/util/upload";
 import { ElMessage } from "element-plus";
+import Upload from "@/components/upload/Upload.vue";
 const store = useStore();
 const { username, gender, introduction, avatar } = store.state.userInfo;
 const userFormRef = ref();
-const init = ref("http://localhost:3000");
-const port_img = ref("http://localhost:3000");
 const userForm = reactive({
   username,
   gender,
@@ -99,18 +81,8 @@ const userForm = reactive({
 //出的bug传回的的file是将file对象进行包装后的对象，要生成file对象的URL
 //然后判定，当userForm.avatar一开始就有的时候使用3000后端传回来的，没有的话就要用本地的端口挂载的
 const handleChange = (file) => {
-  // console.log(file);
-  userForm.avatar = URL.createObjectURL(file.raw);
-  // console.log(userForm.avatar);
-
-  // console.log(file.raw);
-  userForm.file = file.raw;
-  // userForm.avatar = URL.createObjectURL(file);
-  // userForm.file = file;
-
-  // 检查是否存在 raw 属性，如果没有直接使用 file
-
-  init.value = "";
+  userForm.avatar = URL.createObjectURL(file);
+  userForm.file = file;
 };
 
 const submitForm = () => {
@@ -118,8 +90,8 @@ const submitForm = () => {
     if (vaild) {
       console.log("submit");
       const res = await upload("adminapi/user/upload", userForm);
-      if (res.data.ActionType == "OK") {
-        store.commit("changeUserInfo", res.data.data);
+      if (res.ActionType == "OK") {
+        store.commit("changeUserInfo", res.data);
         ElMessage.success("更新成功");
       }
     }
@@ -160,37 +132,5 @@ const userFormRules = reactive({
   .box-card {
     text-align: center;
   }
-}
-
-::v-deep .avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-::v-deep .avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
-
-::v-deep .avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
-}
-
-::v-deep .el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-
-.avatar {
-  width: 178px;
-  height: 178px;
 }
 </style>
