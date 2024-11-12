@@ -51,8 +51,9 @@
             <el-form-item label="头像" prop="avatar">
               <Upload :avatar="userForm.avatar" @kerwinchange="handleChange" />
             </el-form-item>
-            <el-button type="primary" @click="submitForm()"> 登陆 </el-button>
-            <el-form-item> </el-form-item>
+            <el-form-item label-width="80px">
+              <el-button type="primary" @click="submitForm()"> 更改 </el-button>
+            </el-form-item>
           </el-form>
         </el-card>
       </el-col>
@@ -61,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive } from "vue";
+import { computed, ref, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
 import upload from "@/util/upload";
 import { ElMessage } from "element-plus";
@@ -75,6 +76,25 @@ const userForm = reactive({
   introduction,
   avatar,
   file: null,
+});
+
+async function setAvatarAsFile() {
+  try {
+    const response = await fetch(avatarUrl.value, {
+      mode: "cors", // 设置跨域模式
+    });
+    if (!response.ok) throw new Error("无法下载头像图片");
+
+    const blob = await response.blob();
+    userForm.file = new File([blob], "avatar.jpg", { type: blob.type });
+  } catch (error) {
+    console.error("Error downloading avatar:", error);
+  }
+}
+onMounted(async () => {
+  if (userForm.avatar) {
+    await setAvatarAsFile();
+  }
 });
 
 //选择完图片的回调

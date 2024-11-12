@@ -15,4 +15,9 @@ import TopHeader from "@/components/mainbox/TopHeader.vue";
 import SideMenu from "@/components/mainbox/SideMenu.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-main {
+  overflow: auto;
+  height: calc(100vh - 60px);
+}
+</style>
