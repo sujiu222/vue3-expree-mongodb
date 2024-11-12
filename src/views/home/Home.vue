@@ -44,8 +44,9 @@ axios.get('adminapi/user/home').then(res => {
 
 })
 const avatarUrl = computed(() =>
-    store.state.userInfo.avatar ? store.state.userInfo.avatar :
-        'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+    store.state.userInfo.avatar
+        ? 'http://localhost:3000' + store.state.userInfo.avatar
+        : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 
 )
 const welcomeText = computed(() => currentHour.value < 12 ? '早上好，要开心迎接新一天呀！' : '喝杯咖啡提提神吧.')
