@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-page-header content="添加产品" icon="" title="产品管理" />
+    <el-page-header content="编辑产品" icon="" title="产品管理" />
     <el-form
       ref="productFormRef"
       style="max-width: 600px"
@@ -23,17 +23,18 @@
         <Upload :avatar="productForm.cover" @kerwinchange="handleChange" />
       </el-form-item>
       <el-form-item label-width="80px">
-        <el-button type="primary" @click="submitForm()"> 添加产品 </el-button>
+        <el-button type="primary" @click="submitForm()"> 更改产品 </el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import Upload from "@/components/upload/Upload.vue";
 import upload from "@/util/upload";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import axios from "axios";
 
 const router = useRouter();
 const productFormRef = ref();
@@ -61,11 +62,17 @@ const submitForm = () => {
   productFormRef.value.validate(async (valid) => {
     if (valid) {
       console.log(productForm);
-      await upload("/adminapi/product/add", productForm);
-      router.push(`/product-manage/productlist`);
+      await upload("/adminapi/product/list", productForm);
+      router.back();
     }
   });
 };
+onMounted(async () => {
+  //   console.log(useRoute().params);
+  const res = await axios.get(`/adminapi/product/list/${useRoute().params.id}`);
+  Object.assign(productForm, res.data.data[0]);
+  console.log(res.data.data);
+});
 </script>
 
 <style lang="scss" scoped>

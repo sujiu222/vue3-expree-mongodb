@@ -22,13 +22,13 @@ const props = defineProps({
   avatar: String,
   init: String,
 });
+const emit = defineEmits(["kerwinchange"]);
 
 const uploadAvatar = computed(() =>
   props.avatar.includes("blob")
     ? props.avatar
     : "http://localhost:3000" + props.avatar
 );
-const emit = defineEmits(["kerwinchange"]);
 const handleChange = (file) => {
   emit("kerwinchange", file.raw);
 };

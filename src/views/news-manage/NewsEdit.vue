@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-page-header content="创建新闻" icon="" title="新闻管理">
+    <el-page-header content="编辑新闻" @back="handleBack()" title="新闻管理">
     </el-page-header>
 
     <el-form
@@ -16,7 +16,11 @@
         <el-input v-model="newsForm.title" />
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <Editor @event="handleChange" />
+        <Editor
+          @event="handleChange"
+          :content="newsForm.content"
+          v-if="newsForm.content"
+        />
       </el-form-item>
       <el-form-item label="类别" prop="category">
         <el-select
@@ -36,18 +40,19 @@
         <Upload :avatar="newsForm.cover" @kerwinchange="handleChangeCover" />
       </el-form-item>
       <el-form-item label-width="80px">
-        <el-button type="primary" @click="submitForm()"> 添加新闻 </el-button>
+        <el-button type="primary" @click="submitForm()"> 更新新闻 </el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import Editor from "@/components/editor/Editor.vue";
 import Upload from "@/components/upload/Upload.vue";
 import upload from "@/util/upload";
-import { useRouter } from "vue-router";
+import axios from "axios";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const newsFormRef = ref();
 const newsForm = reactive({
@@ -77,11 +82,21 @@ const submitForm = () => {
   newsFormRef.value.validate(async (valid) => {
     if (valid) {
       // console.log(newsForm);
-      await upload("/adminapi/news/add", newsForm);
-      router.push("/news-manage/newslist");
+      await upload("/adminapi/news/list", newsForm);
+      router.back();
     }
   });
 };
+const handleBack = () => {
+  router.back();
+};
+
+onMounted(async () => {
+  //   console.log(useRoute().params);
+  const res = await axios.get(`/adminapi/news/list/${useRoute().params.id}`);
+  Object.assign(newsForm, res.data.data[0]);
+  console.log(newsForm);
+});
 const newsFormRules = {
   title: [
     {
