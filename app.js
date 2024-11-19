@@ -12,6 +12,10 @@ var app = express();
 
 app.use(cors()); // 允许所有来源跨域请求//在center中因为刷新后默认提交的file是null而进行的修改
 const UserRouter = require("./routes/admin/UserRouter");
+const NewsRouter = require("./routes/admin/NewsRouter");
+const WebNewsRouter = require("./routes/web/NewsRouter");
+const ProductRouter = require("./routes/admin/ProductRouter");
+const WebProductRouter = require("./routes/web/ProductRouter");
 const JWT = require("./util/JWT");
 
 // view engine setup
@@ -26,6 +30,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use(WebNewsRouter);
+app.use(WebProductRouter);
+
 app.use((req, res, next) => {
   //如果token有效，next
   //如果过期了，返回401错误
@@ -55,6 +62,8 @@ app.use((req, res, next) => {
   }
 });
 app.use(UserRouter);
+app.use(NewsRouter);
+app.use(ProductRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {});
